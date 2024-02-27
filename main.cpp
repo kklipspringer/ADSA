@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+// Please note, that I've replaced I1 with 'a', and I2 with 'b',
+
 std::vector<std::vector<int>> getInput() {
     // Read inputs 'a' and 'b' as strings
     // Read input B (Base) as an int
@@ -29,18 +31,28 @@ std::vector<std::vector<int>> getInput() {
     return result;
 }
 
+int schoolNByOne(std::vector<int> a, std::vector<int> b, int base) {
+
+}
+
+int schoolNbyN() {
+
+}
+
 int main() {
+    // DECLARATION OF FINAL RESULTS:
+    int schoolRes, karatRes, divRes;
+
+    // INPUT: /////////////////////////////////////////////////////////////////
     // Ask for input, and store in their own vectors: 
-    // Access order: [vecA, vecB, Base] 
-    //               [   0,   1,    2 ]
+    // Access order: [0: vecA, 1:vecB, 2: Base] 
     std::vector<std::vector<int>> inputs = getInput();
+    // Seperate into 2 vectors. Seperate base into an int
+    std::vector<int> a = inputs[0], b = inputs[1];
+    int base = inputs[2][0]; 
 
-    int lenVecA = ;
-    int lenVec B = ;
-
-    if() {
-        
-    }
+    // SCHOOL ADDITION: /////////////////////////////////////////////////////////////////
+    
 
     return 0;
 }
