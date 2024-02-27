@@ -50,7 +50,7 @@ std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base
     int carry = 0;
 
 
-    for(int i = (lenA - 1); i >= 0; i--) {
+    for(int i = (a.size() - 1); i >= 0; i--) {
         int rawSum = a[i] + b[i] + carry;
         s.insert(s.begin(), rawSum % base); // prepend final value to the s vector
         carry = rawSum / base; // work out the next carry
