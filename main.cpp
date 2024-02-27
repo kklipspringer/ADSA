@@ -56,9 +56,9 @@ std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base
         carry = rawSum / base; // work out the next carry
     }
 
-    // Done iterating, but there's still a carry left. 
+    // Done iterating, but there's still a carry left. Prepend that carry. 
     if(carry > 0) {
-        s.push_back(carry);    
+        s.insert(s.begin(), carry);
     }   
 
     return s;
