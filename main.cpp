@@ -4,6 +4,10 @@
 
 // Please note, that I've replaced I1 with 'a', and I2 with 'b',
 
+int vecToInt(std::vector<int> result) {
+    // 
+}
+
 std::vector<std::vector<int>> getInput() {
     // Read inputs 'a' and 'b' as strings
     // Read input B (Base) as an int
@@ -31,26 +35,38 @@ std::vector<std::vector<int>> getInput() {
     return result;
 }
 
-int schoolAddition(std::vector<int> a, std::vector<int> b, int base) {
-    // Add leading zeroes, if digits(a) != digits(b) 
+std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base) {
+    // Add leading zeroes, if digits(a) != digits(b)
+    // i.e. turn an n-digit number into m-digit
     int lenA = a.size(), lenB = b.size();
     int deltaDigits = lenA - lenB;
-    if(deltaDigits > 0) {
-        // all leading zeroes to a
-        for() {
-
-        }
-    } else if (deltaDigits < 0) {
-        // add leading zeroes to b
-        for() {
-            
-        }
+    if(lenA > lenB) { 
+        b.insert(b.begin(), abs(deltaDigits), 0);
+    } else if (lenA < lenB) { 
+        a.insert(a.begin(), abs(deltaDigits), 0);
     } 
+
+    std::vector<int> s; // final sum
+    int carry = 0;
+
+
+    for(int i = (lenA - 1); i >= 0; i--) {
+        int rawSum = a[i] + b[i] + carry;
+        s.insert(s.begin(), rawSum % base); // prepend final value to the s vector
+        carry = rawSum / base; // work out the next carry
+    }
+
+    // Done iterating, but there's still a carry left. 
+    if(carry > 0) {
+        s.push_back(carry);    
+    }   
+
+    return s;
 }
 
 int main() {
     // DECLARATION OF FINAL RESULTS:
-    int schoolRes, karatRes, divRes;
+    //int schoolRes, karatRes, divRes;
 
     // INPUT: /////////////////////////////////////////////////////////////////
     // Ask for input, and store in their own vectors: 
@@ -61,7 +77,10 @@ int main() {
     int base = inputs[2][0]; 
 
     // SCHOOL ADDITION: /////////////////////////////////////////////////////////////////
-
+    std::vector<int> sr = schoolAddition(a, b, base);
+    for(int i = 0; i < sr.size(); i++) { 
+        std::cout << sr[i];
+    }
 
     return 0;
 }
