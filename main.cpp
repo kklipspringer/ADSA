@@ -31,12 +31,21 @@ std::vector<std::vector<int>> getInput() {
     return result;
 }
 
-int schoolNByOne(std::vector<int> a, std::vector<int> b, int base) {
+int schoolAddition(std::vector<int> a, std::vector<int> b, int base) {
+    // Add leading zeroes, if digits(a) != digits(b) 
+    int lenA = a.size(), lenB = b.size();
+    int deltaDigits = lenA - lenB;
+    if(deltaDigits > 0) {
+        // all leading zeroes to a
+        for() {
 
-}
-
-int schoolNbyN() {
-
+        }
+    } else if (deltaDigits < 0) {
+        // add leading zeroes to b
+        for() {
+            
+        }
+    } 
 }
 
 int main() {
@@ -52,7 +61,7 @@ int main() {
     int base = inputs[2][0]; 
 
     // SCHOOL ADDITION: /////////////////////////////////////////////////////////////////
-    
+
 
     return 0;
 }
