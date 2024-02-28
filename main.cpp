@@ -5,7 +5,8 @@
 // Please note, that I've replaced I1 with 'a', and I2 with 'b',
 
 int vecToInt(std::vector<int> result) {
-    // 
+    
+    return 0;
 }
 
 std::vector<std::vector<int>> getInput() {
