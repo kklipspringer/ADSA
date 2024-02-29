@@ -4,10 +4,6 @@
 
 // Please note, that I've replaced I1 with 'a', and I2 with 'b',
 
-int vecToInt(std::vector<int> result) {
-    
-    return 0;
-}
 
 std::vector<std::vector<int>> getInput() {
     // Read inputs 'a' and 'b' as strings
@@ -36,17 +32,20 @@ std::vector<std::vector<int>> getInput() {
     return result;
 }
 
-std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base) {
+void addZeroes(std::vector<int>& a, std::vector<int>& b) {
     // Add leading zeroes, if digits(a) != digits(b)
-    // i.e. turn an n-digit number into m-digit
     int lenA = a.size(), lenB = b.size();
     int deltaDigits = lenA - lenB;
     if(lenA > lenB) { 
-        b.insert(b.begin(), abs(deltaDigits), 0);
+        b.insert(b.begin(), abs(deltaDigits), 0); // make 'b' longer
     } else if (lenA < lenB) { 
-        a.insert(a.begin(), abs(deltaDigits), 0);
-    } 
+        a.insert(a.begin(), abs(deltaDigits), 0); // make 'a' longer
+    } else {
+        return; // length(a) = length(b)
+    }
+}
 
+std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base) {
     std::vector<int> s; // final sum
     int carry = 0;
 
@@ -65,25 +64,42 @@ std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base
     return s;
 }
 
-int main() {
-    // DECLARATION OF FINAL RESULTS:
-    //int schoolRes, karatRes, divRes;
+std::vector<int> karatsubaMult(std::vector<int> a, std::vector<int> b, int base) {
+    
+}
 
-    // INPUT: /////////////////////////////////////////////////////////////////
+int main() {
+    // Declaration of final results 
+    std::vector<int> schoolRes, karatRes; 
+
     // Ask for input, and store in their own vectors: 
     // Access order: [0: vecA, 1:vecB, 2: Base] 
     std::vector<std::vector<int>> inputs = getInput();
     // Seperate into 2 vectors. Seperate base into an int
     std::vector<int> a = inputs[0], b = inputs[1];
+    addZeroes(a, b); // add zeroes, if numbers are different lengths
     int base = inputs[2][0]; 
 
-    // SCHOOL ADDITION: /////////////////////////////////////////////////////////////////
-    std::vector<int> sr = schoolAddition(a, b, base);
-    for(int i = 0; i < sr.size(); i++) { 
-        std::cout << sr[i];
+    // School Addition: 
+    schoolRes = schoolAddition(a, b, base);
+    int schoolSize = schoolRes.size();
+
+    // Karatsuba Multiplication:
+    karatRes = karatsubaMult(a, b, base);
+    int karatSize = karatRes.size();
+
+    // Format the outputs. Addition_Multiplication_0 (no division)
+    for(int i = 0; i < schoolSize; i++) { 
+        std::cout << schoolRes[i];
     }
 
-    std::cout << " 0 0"; 
+    std::cout << " ";
+
+    for(int i = 0; i < karatSize; i++) {
+        std::cout << karatRes[i];
+    }
+
+    std::cout << " 0"; 
 
     return 0;
 }
