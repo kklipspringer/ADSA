@@ -43,17 +43,40 @@ void addZeroes(std::vector<int>& a, std::vector<int>& b) {
 std::vector<int> toBase10(const std::vector<int>& number, int base) {
     int result = 0;
     int power = 0; // Start from the least significant digit
-    
-    for (auto it = number.rbegin(); it != number.rend(); it++) {
+
+    for (auto it = number.rbegin(); it != number.rend(); ++it) {
         result += *it * std::pow(base, power++);
     }
 
     std::vector<int> resultVec;
-    while (result > 0) {
-        resultVec.insert(resultVec.begin(), result % 10);
-        result /= 10;
+    if (result == 0) {
+        resultVec.push_back(0);
+    } else {
+        while (result > 0) {
+            resultVec.insert(resultVec.begin(), result % 10);
+            result /= 10;
+        }
     }
-    return resultVec.empty() ? std::vector<int>{0} : resultVec;
+    return resultVec;
+}
+
+std::vector<int> fromBase10(const std::vector<int>& number, int base) {
+    int value = 0;
+    for (size_t i = 0; i < number.size(); ++i) {
+        value = value * 10 + number[i];
+    }
+
+    std::vector<int> res;
+    if (value == 0) {
+        res.push_back(0);
+    } else {
+        while (value > 0) {
+            res.insert(res.begin(), value % base);
+            value /= base;
+        }
+    }
+
+    return res;
 }
 
 // Addition (vector form) with different bases
