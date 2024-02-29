@@ -83,5 +83,7 @@ int main() {
         std::cout << sr[i];
     }
 
+    std::cout << " 0 0"; 
+
     return 0;
 }
