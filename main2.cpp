@@ -40,23 +40,6 @@ void addZeroes(std::vector<int>& a, std::vector<int>& b) {
     }
 }
 
-std::string fromBase10(long long n, int base) {
-    std::string result;
-    do {
-        result.insert(result.begin(), '0' + (n % base));
-        n /= base;
-    } while (n > 0);
-    return result;
-}
-
-long long toBase10(const std::string& n, int base) {
-    long long result = 0;
-    for (char digit : n) {
-        result = result * base + (digit - '0');
-    }
-    return result;
-}
-
 // Addition (vector form) with different bases
 std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base) {
     addZeroes(a, b);
@@ -78,9 +61,6 @@ std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base
     return s;
 }
 
-std::string karatsubaMultiply() {
-
-}
 
 int main(void) {
     std::vector<int> schoolRes, karatRes;
@@ -95,8 +75,8 @@ int main(void) {
     //std::vector<int> bNewBase = toBase10(b, base);
 
 
-    karatRes = karatsubaMult(aNewBase, bNewBase);
-    karatRes = fromBase10(karatRes, base); 
+    //aratRes = karatsubaMult(aNewBase, bNewBase);
+    //karatRes = fromBase10(karatRes, base); 
 
     for(size_t i = 0; i < schoolRes.size(); i++) {
         std::cout << schoolRes[i];
