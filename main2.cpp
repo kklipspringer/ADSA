@@ -40,43 +40,21 @@ void addZeroes(std::vector<int>& a, std::vector<int>& b) {
     }
 }
 
-std::vector<int> toBase10(const std::vector<int>& number, int base) {
-    int result = 0;
-    int power = 0; // Start from the least significant digit
-
-    for (auto it = number.rbegin(); it != number.rend(); it++) {
-        result += *it * std::pow(base, power++);
-    }
-
-    std::vector<int> resultVec;
-    if (result == 0) {
-        resultVec.push_back(0);
-    } else {
-        while (result > 0) {
-            resultVec.insert(resultVec.begin(), result % 10);
-            result /= 10;
-        }
-    }
-    return resultVec;
+std::string fromBase10(long long n, int base) {
+    std::string result;
+    do {
+        result.insert(result.begin(), '0' + (n % base));
+        n /= base;
+    } while (n > 0);
+    return result;
 }
 
-std::vector<int> fromBase10(const std::vector<int>& number, int base) {
-    int value = 0;
-    for (size_t i = 0; i < number.size(); i++) {
-        value = value * 10 + number[i];
+long long toBase10(const std::string& n, int base) {
+    long long result = 0;
+    for (char digit : n) {
+        result = result * base + (digit - '0');
     }
-
-    std::vector<int> res;
-    if (value == 0) {
-        res.push_back(0);
-    } else {
-        while (value > 0) {
-            res.insert(res.begin(), value % base);
-            value /= base;
-        }
-    }
-
-    return res;
+    return result;
 }
 
 // Addition (vector form) with different bases
@@ -100,7 +78,7 @@ std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base
     return s;
 }
 
-std::vector<int> karatsubaMult(std::vector<int> a, std::vector<int> b) {
+std::string karatsubaMultiply() {
 
 }
 
@@ -113,8 +91,8 @@ int main(void) {
 
     schoolRes = schoolAddition(a, b, base);
 
-    std::vector<int> aNewBase = toBase10(a, base);
-    std::vector<int> bNewBase = toBase10(b, base);
+    //std::vector<int> aNewBase = toBase10(a, base);
+    //std::vector<int> bNewBase = toBase10(b, base);
 
 
     karatRes = karatsubaMult(aNewBase, bNewBase);
