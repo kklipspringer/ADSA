@@ -61,6 +61,7 @@ std::vector<std::vector<int>> splitVec(const std::vector<int>& a) {
 
 // Addition (vector form) with different bases
 std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base) {
+    addZeroes(a, b);
     std::vector<int> s; // final sum
     int carry = 0;
 
@@ -108,7 +109,69 @@ std::vector<int> schoolSubtraction(std::vector<int> a, std::vector<int> b, int b
 
 // Karatsuba Multiplication. 
 std::vector<int> karatsubaMult(std::vector<int> a, std::vector<int> b, int base) {
+    // Normalize the length of numbers
+    addZeroes(a, b);
+    size_t n = a.size();
 
+    // Base case for recursion
+    if (n == 1) {
+        int product = a[0] * b[0];
+        std::vector<int> result;
+        if (product >= base) {
+            result.push_back(product / base); // Carry
+            result.push_back(product % base); // Remainder
+        } else {
+            result.push_back(product);
+        }
+        return result;
+    }
+
+    // Calculate the size of the numbers for splitting
+    size_t m = n / 2;
+
+    // Splitting the numbers into high and low parts
+    std::vector<int> aLow(a.begin() + m, a.end()), aHigh(a.begin(), a.begin() + m);
+    std::vector<int> bLow(b.begin() + m, b.end()), bHigh(b.begin(), b.begin() + m);
+
+    // Ensure aHigh/aLow and bHigh/bLow are of equal length for each pair
+    addZeroes(aHigh, aLow); // Not typically necessary but included for completeness
+    addZeroes(bHigh, bLow); // Not typically necessary but included for completeness
+
+    // 3 recursive calls of Karatsuba multiplication
+    std::vector<int> z0 = karatsubaMult(aLow, bLow, base);
+    std::vector<int> z1 = karatsubaMult(schoolAddition(aLow, aHigh, base), schoolAddition(bLow, bHigh, base), base);
+    std::vector<int> z2 = karatsubaMult(aHigh, bHigh, base);
+
+    // Ensuring z1, z0, and z2 are properly prepared for subtraction and addition
+    addZeroes(z1, z0);
+    addZeroes(z1, z2);
+
+    // Subtracting the sums we don't need
+    z1 = schoolSubtraction(z1, z0, base);
+    z1 = schoolSubtraction(z1, z2, base);
+
+    // Assembling the high, middle, and low parts of the multiplication
+    std::vector<int> result, temp;
+
+    // Add z2 * base^(2*m)
+    temp = z2;
+    temp.insert(temp.end(), 2 * m, 0);
+    result = schoolAddition(result, temp, base);
+
+    // Add z1 * base^m
+    temp = z1;
+    temp.insert(temp.end(), m, 0);
+    result = schoolAddition(result, temp, base);
+
+    // Add z0
+    result = schoolAddition(result, z0, base);
+
+    // Remove leading zeroes, if any
+    while (result.size() > 1 && result[0] == 0) {
+        result.erase(result.begin());
+    }
+
+    return result;
 }
 
 
