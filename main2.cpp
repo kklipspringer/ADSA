@@ -44,7 +44,7 @@ std::vector<int> toBase10(const std::vector<int>& number, int base) {
     int result = 0;
     int power = 0; // Start from the least significant digit
 
-    for (auto it = number.rbegin(); it != number.rend(); ++it) {
+    for (auto it = number.rbegin(); it != number.rend(); it++) {
         result += *it * std::pow(base, power++);
     }
 
@@ -62,7 +62,7 @@ std::vector<int> toBase10(const std::vector<int>& number, int base) {
 
 std::vector<int> fromBase10(const std::vector<int>& number, int base) {
     int value = 0;
-    for (size_t i = 0; i < number.size(); ++i) {
+    for (size_t i = 0; i < number.size(); i++) {
         value = value * 10 + number[i];
     }
 
@@ -100,6 +100,10 @@ std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base
     return s;
 }
 
+std::vector<int> karatsubaMult(std::vector<int> a, std::vector<int> b) {
+
+}
+
 int main(void) {
     std::vector<int> schoolRes, karatRes;
 
@@ -109,11 +113,21 @@ int main(void) {
 
     schoolRes = schoolAddition(a, b, base);
 
-    std::vector<int> aBase10 = toBase10(a, base);
-    std::vector<int> bBase10 = toBase10(b, base);
+    std::vector<int> aNewBase = toBase10(a, base);
+    std::vector<int> bNewBase = toBase10(b, base);
+
+
+    karatRes = karatsubaMult(aNewBase, bNewBase);
+    karatRes = fromBase10(karatRes, base); 
 
     for(size_t i = 0; i < schoolRes.size(); i++) {
         std::cout << schoolRes[i];
+    }
+    
+    std::cout << " ";
+
+    for(size_t i = 0; i < karatRes.size(); i++) {
+        std::cout << karatRes[i];
     }
 
     return 0;
