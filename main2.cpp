@@ -73,9 +73,13 @@ std::string vecToString(const std::vector<int>& vecIn) {
     return result;
 }
 
+InfInt karatsuba(InfInt x, InfInt y) {
+    return (x*y);
+}
+
 
 int main(void) {
-    std::vector<int> schoolRes, karatRes;
+    std::vector<int> schoolRes;
 
     std::vector<std::vector<int>> inputs = getInput();
     std::vector<int> a = inputs[0], b = inputs[1];
@@ -86,15 +90,17 @@ int main(void) {
     InfInt regularA = vecToString(a);
     InfInt regularB = vecToString(b);
 
+    InfInt karatRes = karatsuba(regularA, regularB);
+
     for(size_t i = 0; i < schoolRes.size(); i++) {
         std::cout << schoolRes[i];
     }
     
-    std::cout << " ";
+    std::cout << " " << karatRes << " 0";
 
-    for(size_t i = 0; i < karatRes.size(); i++) {
-        std::cout << karatRes[i];
-    }
+    // debug
+    // std::cout << "A: " << regularA << " ";
+    // std::cout << "B:" << regularB;
 
     return 0;
 }
