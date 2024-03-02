@@ -1,6 +1,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include "InfInt.h"
 
 // Please note, that I've replaced I1 with 'a', and I2 with 'b',
 
@@ -30,6 +31,11 @@ std::vector<std::vector<int>> getInput() {
     result.push_back(vecBase);
 
     return result;
+}
+
+// Converts vector (in which each element is a number), to a string. 
+std::string vectorToString() {
+
 }
 
 // Add leading zeroes, if digits(a) != digits(b)
@@ -173,7 +179,6 @@ std::vector<int> karatsubaMult(std::vector<int> a, std::vector<int> b, int base)
 
     return result;
 }
-
 
 int main() {
     // Declaration of final results 

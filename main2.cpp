@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <cmath> // For pow function
+#include "InfInt.h" // For longer C++ integers
 
 // Get and format input
 std::vector<std::vector<int>> getInput() {
@@ -61,6 +62,17 @@ std::vector<int> schoolAddition(std::vector<int> a, std::vector<int> b, int base
     return s;
 }
 
+std::string vecToString(const std::vector<int>& vecIn) {
+    std::string result;
+    for(int digit : vecIn) {
+        // btwn [0,9]
+        if((digit >= 0) && (digit <= 9)) {
+            result += '0' + digit;
+        }
+    }
+    return result;
+}
+
 
 int main(void) {
     std::vector<int> schoolRes, karatRes;
@@ -71,12 +83,8 @@ int main(void) {
 
     schoolRes = schoolAddition(a, b, base);
 
-    //std::vector<int> aNewBase = toBase10(a, base);
-    //std::vector<int> bNewBase = toBase10(b, base);
-
-
-    //aratRes = karatsubaMult(aNewBase, bNewBase);
-    //karatRes = fromBase10(karatRes, base); 
+    InfInt regularA = vecToString(a);
+    InfInt regularB = vecToString(b);
 
     for(size_t i = 0; i < schoolRes.size(); i++) {
         std::cout << schoolRes[i];
