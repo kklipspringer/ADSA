@@ -74,7 +74,15 @@ std::string vecToString(const std::vector<int>& vecIn) {
 }
 
 InfInt karatsuba(InfInt x, InfInt y) {
-    return (x*y);
+    InfInt a = x / Base ^ ?
+    InfInt b = ;
+    InfInt c = y / ;
+    InfInt d = ;
+
+    
+    InfInt ac = karatsuba(a, c);
+    InfInt bd = karatsuba(b, d);
+    ad_plus_bc = karatsuba(a + b, c + d), - ac - bd; 
 }
 
 
@@ -90,7 +98,7 @@ int main(void) {
     InfInt regularA = vecToString(a);
     InfInt regularB = vecToString(b);
 
-    InfInt karatRes = karatsuba(regularA, regularB);
+    InfInt karatRes = karatsuba(regularA, regularB, base);
 
     for(size_t i = 0; i < schoolRes.size(); i++) {
         std::cout << schoolRes[i];
