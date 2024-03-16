@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cmath> // For pow function
-#include "InfInt.h" // For longer C++ integers
+#include <cmath> // For pow 
+#include "InfInt.h" // For longer C++ integers. External library.
 
 // Get and format input
 std::vector<std::vector<int>> getInput() {
@@ -111,27 +111,27 @@ InfInt fromBase10(const InfInt& num, int base) {
 }
 
 InfInt karatsuba(const InfInt& x, const InfInt& y) {
-    // base acse
+    // base case
     if (x < 10 || y < 10) {
         return x * y;
     }
 
     // Size of nums
     size_t size = std::max(x.numberOfDigits(), y.numberOfDigits());
-    size_t halfSize = size / 2;
+    size_t half = size / 2;
 
     // Split
-    InfInt high1 = x / InfInt("1" + std::string(halfSize, '0')); // equivalent to x / 10^halfSize
-    InfInt low1 = x % InfInt("1" + std::string(halfSize, '0')); // equivalent to x % 10^halfSize
-    InfInt high2 = y / InfInt("1" + std::string(halfSize, '0')); // y / 10^halfSize
-    InfInt low2 = y % InfInt("1" + std::string(halfSize, '0')); // y % 10^halfSize
+    InfInt high1 = x / InfInt("1" + std::string(half, '0')); 
+    InfInt low1 = x % InfInt("1" + std::string(half, '0')); 
+    InfInt high2 = y / InfInt("1" + std::string(half, '0')); 
+    InfInt low2 = y % InfInt("1" + std::string(half, '0')); 
 
     // products
     InfInt z0 = karatsuba(low1, low2);
     InfInt z1 = karatsuba((low1 + high1), (low2 + high2));
     InfInt z2 = karatsuba(high1, high2);
     // return final product
-    return z2 * InfInt("1" + std::string(2 * halfSize, '0')) + (z1 - z2 - z0) * InfInt("1" + std::string(halfSize, '0')) + z0;
+    return z2 * InfInt("1" + std::string(2 * half, '0')) + (z1 - z2 - z0) * InfInt("1" + std::string(half, '0')) + z0;
 }
 
 
@@ -144,16 +144,23 @@ int main(void) {
 
     schoolRes = schoolAddition(a, b, base);
     
+    // I'm first converting a and b, from vectors to strings. 
+    // ..those strings are converted to a base of 10. 
+    // ..then karatsuba is performed on those numbers in Base 10.     
+    // ..then finally, I convert it to the original base. 
+    //-----------------------------------------------------------
     InfInt stringA = vecToString(a);
     InfInt stringB = vecToString(b);
 
-    InfInt baseTenA = toBase10(stringA, base); // Vector -> String. String Number -> Base 10. 
+    InfInt baseTenA = toBase10(stringA, base);
     InfInt baseTenB = toBase10(stringB, base);
 
     InfInt karatRes = karatsuba(baseTenA, baseTenB);
 
     InfInt karatFinal = fromBase10(karatRes, base);
+    //-----------------------------------------------------------
 
+    // print school addition result 
     for(size_t i = 0; i < schoolRes.size(); i++) {
         std::cout << schoolRes[i];
     }
