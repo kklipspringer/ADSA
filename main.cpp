@@ -89,6 +89,7 @@ InfInt fromBase10(const InfInt& num, int base) {
     
 }
 
+
 InfInt karatsuba(const InfInt& x, const InfInt& y) {
     // base acse
     if (x < 10 || y < 10) {
