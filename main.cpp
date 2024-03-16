@@ -73,10 +73,44 @@ std::string vecToString(const std::vector<int>& vecIn) {
     return result;
 }
 
-InfInt karatsuba(InfInt x, InfInt y) {
-    // place holder
-    InfInt a = x + y;
-    return a;
+InfInt toBase10(const InfInt& num, int base) {
+    if(base == 10) {
+        return num;
+    }
+
+
+}
+
+InfInt fromBase10(const InfInt& num, int base) {
+    if(base == 10) {
+        return num;
+    }
+
+    
+}
+
+InfInt karatsuba(const InfInt& x, const InfInt& y) {
+    // base acse
+    if (x < 10 || y < 10) {
+        return x * y;
+    }
+
+    // Size of nums
+    size_t size = std::max(x.numberOfDigits(), y.numberOfDigits());
+    size_t halfSize = size / 2;
+
+    // Split
+    InfInt high1 = x / InfInt("1" + std::string(halfSize, '0')); // equivalent to x / 10^halfSize
+    InfInt low1 = x % InfInt("1" + std::string(halfSize, '0')); // equivalent to x % 10^halfSize
+    InfInt high2 = y / InfInt("1" + std::string(halfSize, '0')); // y / 10^halfSize
+    InfInt low2 = y % InfInt("1" + std::string(halfSize, '0')); // y % 10^halfSize
+
+    // products
+    InfInt z0 = karatsuba(low1, low2);
+    InfInt z1 = karatsuba((low1 + high1), (low2 + high2));
+    InfInt z2 = karatsuba(high1, high2);
+    // return final product
+    return z2 * InfInt("1" + std::string(2 * halfSize, '0')) + (z1 - z2 - z0) * InfInt("1" + std::string(halfSize, '0')) + z0;
 }
 
 
@@ -88,11 +122,13 @@ int main(void) {
     int base = inputs[2][0];
 
     schoolRes = schoolAddition(a, b, base);
+    
+    InfInt baseTenA = toBase10(vecToString(a)); // Vector -> String. String Number -> Base 10. 
+    InfInt baseTenB = toBase10(vecToString(b));
 
-    InfInt regularA = vecToString(a);
-    InfInt regularB = vecToString(b);
+    InfInt karatRes = karatsuba(baseTenA, baseTenB);
 
-    InfInt karatRes = karatsuba(regularA, regularB);
+    InfInt final = fromBase10(karatRes, base);
 
     for(size_t i = 0; i < schoolRes.size(); i++) {
         std::cout << schoolRes[i];
