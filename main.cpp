@@ -78,7 +78,17 @@ InfInt toBase10(const InfInt& num, int base) {
         return num;
     }
 
+    InfInt res = 0;
+    InfInt mult = 1;
+    InfInt tempNum = num;
+    while(tempNum > 0) {
+        InfInt digit = tempNum % 10;
+        res = res + (digit * mult);
+        mult = mult * base;
+        tempNum /= 10;
+    }
 
+    return res;
 }
 
 InfInt fromBase10(const InfInt& num, int base) {
@@ -86,9 +96,19 @@ InfInt fromBase10(const InfInt& num, int base) {
         return num;
     }
 
-    
-}
+    InfInt res = 0;
+    InfInt tempNum = num;
+    InfInt mult = 1;
 
+    while(tempNum > 0) {
+        InfInt remainder = tempNum % base;
+        res += remainder * mult;
+        mult = mult * 10; 
+        tempNum /= base;
+    }
+
+    return res;
+}
 
 InfInt karatsuba(const InfInt& x, const InfInt& y) {
     // base acse
@@ -124,18 +144,21 @@ int main(void) {
 
     schoolRes = schoolAddition(a, b, base);
     
-    InfInt baseTenA = toBase10(vecToString(a)); // Vector -> String. String Number -> Base 10. 
-    InfInt baseTenB = toBase10(vecToString(b));
+    InfInt stringA = vecToString(a);
+    InfInt stringB = vecToString(b);
+
+    InfInt baseTenA = toBase10(stringA, base); // Vector -> String. String Number -> Base 10. 
+    InfInt baseTenB = toBase10(stringB, base);
 
     InfInt karatRes = karatsuba(baseTenA, baseTenB);
 
-    InfInt final = fromBase10(karatRes, base);
+    InfInt karatFinal = fromBase10(karatRes, base);
 
     for(size_t i = 0; i < schoolRes.size(); i++) {
         std::cout << schoolRes[i];
     }
     
-    std::cout << " " << karatRes << " 0";
+    std::cout << " " << karatFinal << " 0";
 
     // debug
     // std::cout << "A: " << regularA << " ";
