@@ -17,11 +17,33 @@ struct Node {
     int height;
     Node* left;
     Node* right;
+
+    Node(int keyIn) {
+        key = keyIn;
+        height = 1;
+        left = nullptr;
+        right = nullptr;
+    }
 };
 
 class AVL {
     public:
         // Balancing
+        int height(Node* node) { // get height 
+            if(!node) {
+                return 0;
+            }
+
+            return (node->height);
+        }
+
+        int balanceFactor(Node* node) { // calculate balance factor. b(v) = h(Tl) - h(Tr)    (left - right)
+            if(!node) {
+                return 0;
+            }
+
+            return (height(node->left) - height(node->right)); 
+        }
 
         // Insertion
 
