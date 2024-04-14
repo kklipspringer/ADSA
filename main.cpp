@@ -188,12 +188,12 @@ class AVL {
                     }
                     delete temp;
                 } else {
-                    Node* temp = node->right;
-                    while (temp && temp->left != nullptr) {
-                        temp = temp->left;
+                    Node* temp = node->left;
+                    while (temp->right != nullptr) { // Move to the rightmost node
+                        temp = temp->right;
                     }
                     node->key = temp->key;
-                    node->right = del(node->right, temp->key);
+                    node->left = del(node->left, temp->key);
                 }
             }
 
