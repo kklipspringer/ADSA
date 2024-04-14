@@ -60,8 +60,8 @@ class AVL {
             Node* T2 = x->right;
             x->right = y;
             y->left = T2;
-            y->height = (max(height(y->left), height(y->right))) + 1;
-            x->height = (max(height(x->left), height(x->right))) + 1;
+            y->height = max(height(y->left), height(y->right)) + 1;
+            x->height = max(height(x->left), height(x->right)) + 1;
             return x;
         }
 
@@ -113,7 +113,18 @@ class AVL {
             return node;
         }
 
-        // Traverse and print out tree. Param tells it which method to use. 
+        // basically a helper function, for traverse(). To print out "EMPTY" correctly, if necessary
+        void startTraverse(Node* node, string method) {
+            if (node == nullptr) {
+                cout << "EMPTY"; 
+            } else {
+                bool first = true; 
+                traverse(node, method, first);
+            }
+            cout << endl; 
+        }
+
+        // traverse and print out tree. Param tells it which method to use. 
         void traverse(Node* node, string method, bool& first) {
             if (node == nullptr) {
                 return;
@@ -153,14 +164,7 @@ class AVL {
                 cout << node->key;
             }
         }
-
-// To be called from outside to start the traversal
-void startTraverse(Node* node, string method) {
-    bool first = true; // Initialize 'first' as true at the start of traversal
-    traverse(node, method, first);
-}
-
-        
+      
         // Deletion
         Node* del(Node* node, int key) {
             if (node == nullptr) {
@@ -241,8 +245,7 @@ int main(void) {
             int num = stoi(inputLine[i].substr(1));
             tree.root = tree.del(tree.root, num);
         } else { // if its not an A or D instruction, it must want traversal. Also specify the method.  
-            bool first = true;
-            tree.traverse(tree.root, (inputLine[i]), first); 
+            tree.startTraverse(tree.root, inputLine[i]);
         }
     }
 
