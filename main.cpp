@@ -55,11 +55,42 @@ class AVL {
             return (height(node->left) - height(node->right)); 
         }
 
-        // Insertion
+        Node* RR(Node* y) { // right rotate
+            Node* x = y->left;
+            Node* T2 = x->right;
+            x->right = y;
+            y->left = T2;
+            y->height = (max(height(y->left), height(y->right))) + 1;
+            x->height = (max(height(x->left), height(x->right))) + 1;
+            return x;
+        }
 
+        Node* LR(Node* x) { // left rotate
+            Node* y = x->right;
+            Node* T2 = y->left;
+            y->left = x;
+            x->right = T2;
+            x->height = (max(height(x->left), height(x->right))) + 1;
+            y->height = (max(height(y->left), height(y->right))) + 1;
+            return y;
+        }
+
+        // Insertion
+        Node* insert(Node* node, int key) {}
+        
         // Traverse and print out tree. Param tells it which method to use. 
-        void traverse() {  
-            
+        void traverse(Node* node, string method) {  
+            if(method == "POSTORDER") {
+                
+            }
+
+            if(method == "PREORDER") {
+
+            } 
+
+            if(method == "INORDER") {
+
+            }
         }
 
         // Deletion
@@ -76,10 +107,10 @@ int main(void) {
     for(int i = 0; i < instructLen; i++) {
         if(inputLine[i][0] == 'A') {
             int num = stoi(inputLine[i].substr(1));
-            //tree.root = tree.insert(tree.root, num);
+            tree.root = tree.insert(tree.root, num);
         } else if(inputLine[i][0] == 'D') {
             int num = stoi(inputLine[i].substr(1));
-            //tree.root = tree.insert(tree.root, num);
+            tree.root = tree.insert(tree.root, num);
         } else {
 
         }
