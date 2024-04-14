@@ -75,7 +75,42 @@ class AVL {
         }
 
         // Insertion
-        Node* insert(Node* node, int key) {}
+        Node* insert(Node* node, int key) {
+            if (node == nullptr) {
+                return new Node(key);
+            }
+            if (key < node->key) {
+                node->left = insert(node->left, key);
+            } else if (key > node->key) {
+                node->right = insert(node->right, key);
+            } else {
+                return node;  // Cannot insert same key. 
+            }
+
+            node->height = 1 + (max(height(node->left), height(node->right)));
+
+            int balance = balanceFactor(node);
+            // left left
+            if(balance > 1 && key < node->left->key) {
+                return RR(node);
+            }
+            // right right
+            if(balance < -1 && key > node->right->key) {
+                return LR(node);
+            }
+            // left right
+            if(balance > 1 && key > node->left->key) {
+                node->left = LR(node->left);
+                return RR(node);
+            }
+            // right left
+            if(balance < -1 && key < node->right->key) {
+                node->right = RR(node->right);
+                return LR(node);
+            }
+
+            return node;
+        }
 
         // Traverse and print out tree. Param tells it which method to use. 
         void traverse(Node* node, string method) {
@@ -101,26 +136,92 @@ class AVL {
                 cout << node->key << " ";
             }
         }
-
         // Deletion
-        Node* insert(Node* node, int key) {}
-};
+        Node* del(Node* node, int key) {
+            if (node == nullptr) {
+                return node;  // Cant find node with that key. Just returns 
+            }
+
+            // does bst deletion first, then gets balance factor, and balances it
+            if(key < node->key) {
+                node->left = del(node->left, key);
+            } else if(key > node->key) {
+                node->right = del(node->right, key);
+            } else {
+                // node with only one child or no child
+                if((node->left == nullptr) || (node->right == nullptr)) {
+                    Node* temp = node->left ? node->left : node->right;
+                    if(temp == nullptr) { // has no child
+                        temp = node;
+                        node = nullptr;
+                    } else { // only one child
+                        *node = *temp; 
+                    }
+                    delete temp;
+                } else {
+                    Node* temp = minValueNode(node->right);
+                    node->key = temp->key;
+                    node->right = del(node->right, temp->key);
+                }
+            }
+
+            // tree only has root
+            if(node == nullptr) {
+                return node;
+            }
+
+            node->height = 1 + (max(height(node->left), height(node->right)));
+            int bf = balanceFactor(node);
+
+            // left left
+            if(bf > 1 && balanceFactor(node->left) >= 0) {
+                return RR(node);
+            }
+            // left right
+            if(bf > 1 && balanceFactor(node->left) < 0) {
+                node->left = LR(node->left);
+                return RR(node);
+            }
+            // right right
+            if(bf < -1 && balanceFactor(node->right) <= 0) {
+                return LR(node);
+            }
+            // right left
+            if(bf < -1 && balanceFactor(node->right) > 0) {
+                node->right = RR(node->right);
+                return LR(node);
+            }
+
+            return node;
+        }
+
+        Node* minValueNode(Node* node) {
+            Node* cur = node;
+
+            while(cur->left != nullptr) {
+                cur = cur->left;
+            }
+            return cur;
+        }
+
+        };
 
 int main(void) {
     // Create blank tree
     AVL tree;
     // Get input from user
     vector<string> inputLine = getInput();
-    size_t instructLen = inputLine.size();
+    int instructLen = inputLine.size();
 
-    // Read the returned input string. Call necessary functions
+    // Read the returned input string. Call necessary functions. 
+    // I'm making the assumption, that inputs will be valid. 
     for(int i = 0; i < instructLen; i++) {
         if(inputLine[i][0] == 'A') {
             int num = stoi(inputLine[i].substr(1));
             tree.root = tree.insert(tree.root, num);
         } else if(inputLine[i][0] == 'D') {
             int num = stoi(inputLine[i].substr(1));
-            tree.root = tree.delete(tree.root, num);
+            tree.root = tree.del(tree.root, num);
         } else { // if its not an A or D instruction, it must want traversal. Also specify the method.  
             tree.traverse(tree.root, (inputLine[i])); 
         }
