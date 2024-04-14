@@ -1,8 +1,7 @@
-#include <iostream>
-#include <string>  // 
+#include <iostream> // for printing out traversed tree
+#include <string>  // for user input
 #include <sstream> // for reading and processing the user input
-#include <algorithm> 
-
+#include <algorithm> // for max() function. Used in my rotation functions
 
 using namespace std;
 
@@ -77,23 +76,34 @@ class AVL {
 
         // Insertion
         Node* insert(Node* node, int key) {}
-        
+
         // Traverse and print out tree. Param tells it which method to use. 
-        void traverse(Node* node, string method) {  
-            if(method == "POSTORDER") {
-                
+        void traverse(Node* node, string method) {
+            if(node == nullptr) {
+                return;
             }
 
-            if(method == "PREORDER") {
-
+            if(method == "PRE") {
+                cout << node->key << " ";
+                traverse(node->left, method);
+                traverse(node->right, method);
             } 
-
-            if(method == "INORDER") {
-
+            
+            if(method == "IN") {
+                traverse(node->left, method);
+                cout << node->key << " ";
+                traverse(node->right, method);
+            } 
+            
+            if(method == "POST") {
+                traverse(node->left, method);
+                traverse(node->right, method);
+                cout << node->key << " ";
             }
         }
 
         // Deletion
+        Node* insert(Node* node, int key) {}
 };
 
 int main(void) {
@@ -110,9 +120,9 @@ int main(void) {
             tree.root = tree.insert(tree.root, num);
         } else if(inputLine[i][0] == 'D') {
             int num = stoi(inputLine[i].substr(1));
-            tree.root = tree.insert(tree.root, num);
-        } else {
-
+            tree.root = tree.delete(tree.root, num);
+        } else { // if its not an A or D instruction, it must want traversal. Also specify the method.  
+            tree.traverse(tree.root, (inputLine[i])); 
         }
     }
 }
