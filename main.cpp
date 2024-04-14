@@ -117,19 +117,19 @@ class AVL {
             if(node == nullptr) {
                 return;
             }
-
-            if(method == "PRE") {
+            // PREORDER TRAVERSAL
+            if(method == "PER") {
                 cout << node->key << " ";
                 traverse(node->left, method);
                 traverse(node->right, method);
             } 
-            
+            //INORDER TRAVERSAL
             if(method == "IN") {
                 traverse(node->left, method);
                 cout << node->key << " ";
                 traverse(node->right, method);
             } 
-            
+            // POSTORDER TRAVERSAL
             if(method == "POST") {
                 traverse(node->left, method);
                 traverse(node->right, method);
@@ -159,7 +159,10 @@ class AVL {
                     }
                     delete temp;
                 } else {
-                    Node* temp = minValueNode(node->right);
+                    Node* temp = node->right;
+                    while (temp && temp->left != nullptr) {
+                        temp = temp->left;
+                    }
                     node->key = temp->key;
                     node->right = del(node->right, temp->key);
                 }
@@ -194,17 +197,7 @@ class AVL {
 
             return node;
         }
-
-        Node* minValueNode(Node* node) {
-            Node* cur = node;
-
-            while(cur->left != nullptr) {
-                cur = cur->left;
-            }
-            return cur;
-        }
-
-        };
+};
 
 int main(void) {
     // Create blank tree
@@ -226,4 +219,6 @@ int main(void) {
             tree.traverse(tree.root, (inputLine[i])); 
         }
     }
+
+    return 0; 
 }
