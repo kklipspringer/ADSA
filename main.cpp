@@ -1,5 +1,6 @@
 #include <iostream> // for printing out traversed tree
 #include <string>  // for user input
+#include <vector>
 #include <sstream> // for reading and processing the user input
 #include <algorithm> // for max() function. Used in my rotation functions
 
