@@ -6,10 +6,19 @@
 
 using namespace std;
 
-string getInput() {
-    string userInput; 
-    getline(cin, userInput);
-    return (userInput);
+vector<string> getInput() {
+    string in;
+    getline(cin, in); 
+    vector<string> tokens;
+    string token;
+    istringstream tokenStream(in);
+
+    // Add every word (A3, I3, to vector), and return it
+    while(tokenStream >> token) {
+        tokens.push_back(token); 
+    }
+
+    return (tokens);
 }
 
 struct Node {
@@ -28,6 +37,7 @@ struct Node {
 
 class AVL {
     public:
+        Node* root = nullptr;
         // Balancing
         int height(Node* node) { // get height 
             if(!node) {
@@ -47,17 +57,9 @@ class AVL {
 
         // Insertion
 
-        // Print out trees
-        void preOrder() {
-
-        }
-
-        void inOrder() {
-
-        }
-
-        void postOrder() {
-
+        // Traverse and print out tree. Param tells it which method to use. 
+        void traverse() {  
+            
         }
 
         // Deletion
@@ -67,11 +69,19 @@ int main(void) {
     // Create blank tree
     AVL tree;
     // Get input from user
-    string input = getInput();
-    istringstream iss(input);
-    string split;
-    while(iss >> split) {
-        
-    }  
+    vector<string> inputLine = getInput();
+    size_t instructLen = inputLine.size();
 
+    // Read the returned input string. Call necessary functions
+    for(int i = 0; i < instructLen; i++) {
+        if(inputLine[i][0] == 'A') {
+            int num = stoi(inputLine[i].substr(1));
+            //tree.root = tree.insert(tree.root, num);
+        } else if(inputLine[i][0] == 'D') {
+            int num = stoi(inputLine[i].substr(1));
+            //tree.root = tree.insert(tree.root, num);
+        } else {
+
+        }
+    }
 }
