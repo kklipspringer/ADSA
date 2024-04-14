@@ -114,29 +114,53 @@ class AVL {
         }
 
         // Traverse and print out tree. Param tells it which method to use. 
-        void traverse(Node* node, string method) {
-            if(node == nullptr) {
+        void traverse(Node* node, string method, bool& first) {
+            if (node == nullptr) {
                 return;
             }
+
             // PREORDER TRAVERSAL
-            if(method == "PER") {
-                cout << node->key << " ";
-                traverse(node->left, method);
-                traverse(node->right, method);
-            } 
-            //INORDER TRAVERSAL
+            if(method == "PRE") {
+                if(!first) { 
+                    cout << " "; 
+                } else {
+                    first = false;
+                }
+                cout << node->key;
+                traverse(node->left, method, first);
+                traverse(node->right, method, first);
+            }
+            // INORDER TRAVERSAL
             if(method == "IN") {
-                traverse(node->left, method);
-                cout << node->key << " ";
-                traverse(node->right, method);
-            } 
+                traverse(node->left, method, first);
+                if (!first) { 
+                    cout << " "; 
+                } else {
+                    first = false;
+                }
+                cout << node->key;
+                traverse(node->right, method, first);
+            }
             // POSTORDER TRAVERSAL
             if(method == "POST") {
-                traverse(node->left, method);
-                traverse(node->right, method);
-                cout << node->key << " ";
+                traverse(node->left, method, first);
+                traverse(node->right, method, first);
+                if (!first) { 
+                    cout << " "; 
+                } else {
+                    first = false;
+                }
+                cout << node->key;
             }
         }
+
+// To be called from outside to start the traversal
+void startTraverse(Node* node, string method) {
+    bool first = true; // Initialize 'first' as true at the start of traversal
+    traverse(node, method, first);
+}
+
+        
         // Deletion
         Node* del(Node* node, int key) {
             if (node == nullptr) {
@@ -217,7 +241,8 @@ int main(void) {
             int num = stoi(inputLine[i].substr(1));
             tree.root = tree.del(tree.root, num);
         } else { // if its not an A or D instruction, it must want traversal. Also specify the method.  
-            tree.traverse(tree.root, (inputLine[i])); 
+            bool first = true;
+            tree.traverse(tree.root, (inputLine[i]), first); 
         }
     }
 
