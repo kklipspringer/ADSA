@@ -54,27 +54,27 @@ class hashTable {
         }
 
         // Start at the hashed entry. Then keep looking, and eventually wrap around. Do this 26 times.
-        bool Search(string key) {
-            int potentialIndex = hash(key);
+        int Search(string key) {
+            int targetIndex = hash(key);
             int maxIterations = 26 - hash(key);
 
             for(int i = 0; i < 26; i++) {
                 // To be found, it must be marked occupied, and the keys must match. 
-                if((hTable[potentialIndex].key == key) && (hTable[potentialIndex].status == "Occupied")) {
-                    return true; 
+                if((hTable[targetIndex].key == key) && (hTable[targetIndex].status == "Occupied")) {
+                    return targetIndex; 
                 } else {
-                    potentialIndex = (potentialIndex + 1) % 26; // to wrap around properly. 
+                    targetIndex = (targetIndex + 1) % 26; // to wrap around properly. 
                 }
             }
 
             // If it's looked through 26 entries, then it doesn't exist, or it's been deleted.
             // Therefore, return false.  
-            return false; 
+            return -1; 
         }
 
         void Insert(string key) {
             // If it exists, return. 
-            if(Search(key)) {
+            if(Search(key) != -1) {
                 return;
             }
 
@@ -93,9 +93,19 @@ class hashTable {
             }
         }
 
-        void Delete(string target) {}
+        void Delete(string key) {
+            int deletionTarget = Search(key);
+            // If it does exist. 
+            if(deletionTarget != -1) {
+                hTable[deletionTarget].status == "Tombstone";
+            }   
 
-        void printTable() {}
+            return;
+        }
+
+        void printTable() {
+
+        }
 };
 
 void executeInstructions(vector<string> instructions) {
