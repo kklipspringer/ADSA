@@ -104,19 +104,30 @@ class hashTable {
         }
 
         void printTable() {
-
+            for(int i = 0; i < 26; i++) {
+                // Entry must exist. 
+                if(hTable[i].status == "Occupied") {
+                    if(i == 25) {
+                        // print with no space.
+                        cout << hTable[i].key;
+                    } else {
+                        // print with space. 
+                        cout << hTable[i].key << " ";
+                    }
+                }
+            }
         }
 };
 
-void executeInstructions(vector<string> instructions) {
-    
-}
-
 int main(void) {
-    // Read input
-
-    // Call functions based on input
-
+    // Execute instructions that are received, from getInput. 
+    vector<string> fullInstructions = getInput(); 
+    hashTable ht();
+    
+    size_t instructionCount = fullInstructions.size(); 
+    for(int i = 0; i < instructionCount; i++) {
+        
+    }
     // Print the table. 
     return 0;
 }
