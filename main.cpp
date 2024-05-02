@@ -24,34 +24,47 @@ using namespace std;
 
 // }
 
+struct Entry {
+    string key; // Single letter
+    string status; // Never Used, Occupied, Tombstone
+    Entry() {
+        key = "";
+        status = "Never Used";
+    }
+};
+
 class hashTable {
-    public:
-        vector<string> hTable;
+    private:
+        vector<Entry> hTable; // Vector of Entries. 
+    public:        
         // Initialise the hash table, with 26 "never used" entries
         hashTable() {
             for(int i = 0; i < 26; i++) {
-                hTable.push_back("never used");
+                hTable.push_back(Entry());
             }
         }
 
-        // take a letter as input. Convert to an index. 
-        int letterToIndex(string letter) {
-
-        }
-
-        void Search() {
-            
-        }
-        void Insert() {
-            return;
-        }
-        void Delete(string target) {
-            if() {
-
+        // Take word in. Use last letter. Convert letter to hash table index. 
+        int hash(string key) {
+            if(key.empty()) {
+                return (-1);
             }
+
+            char lastChar = key.back(); // access last char. 
+            return (lastChar - 'a')  % 26; 
         }
 
-        void printTable();
+        bool Search(string key) {
+            int potentialIndex = hash(key);
+            //.... go to index. is it there? no? increase index. Is it there? no? increase index.
+            // If you've reached the end, return. 
+        }
+
+        void Insert() {}
+
+        void Delete(string target) {}
+
+        void printTable() {}
 };
 
 int main(void) {
