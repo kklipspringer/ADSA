@@ -92,7 +92,7 @@ class hashTable {
             int targetIndex = Search(key);
             // If it does exist. 
             if(targetIndex != -1) {
-                hTable[targetIndex].status == "Tombstone";
+                hTable[targetIndex].status = "Tombstone";
             }   
 
             return;
