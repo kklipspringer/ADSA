@@ -1,30 +1,25 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 
 using namespace std; 
 
 
-// EACH SLOT HAS 2 COMPONENTS. STATUS, AND VALUE. 
-
-// never used, tombstone, occupied
-// table starts with 26 never used slots a-z. 
-// length of key at most 10. Hash func uses last character. 
-
-
-// Search: if key matches, then its been found. If never used, or tombstone, move onto next slot. 
-//         Need to wrap around if its the last one. 
-
-// Insertion: Check that key DOES NOT exist. If it exists, do nothing. 
-//            Take last char as as key. If not used/tombstone, put key there. Try 
-//            nxet slot if occupied. 
-
-// Deletion: Search for it. Find key and change slot status to tombstone. 
-// vector<string> getInput() {
-
-// }
+// Get and tokenise input. 
+// Please note, that this function was reused from my A2 code.
 vector<string> getInput() {
-    // tokenise and get input
+    string in;
+    getline(cin, in); 
+    vector<string> tokens;
+    string token;
+    istringstream tokenStream(in);
+
+    while(tokenStream >> token) {
+        tokens.push_back(token); 
+    }
+
+    return (tokens);
 }
 
 struct Entry {
@@ -56,7 +51,7 @@ class hashTable {
         // Start at the hashed entry. Then keep looking, and eventually wrap around. Do this 26 times.
         int Search(string key) {
             int targetIndex = hash(key);
-            int maxIterations = 26 - hash(key);
+            //int maxIterations = 26 - hash(key);
 
             for(int i = 0; i < 26; i++) {
                 // To be found, it must be marked occupied, and the keys must match. 
@@ -94,40 +89,54 @@ class hashTable {
         }
 
         void Delete(string key) {
-            int deletionTarget = Search(key);
+            int targetIndex = Search(key);
             // If it does exist. 
-            if(deletionTarget != -1) {
-                hTable[deletionTarget].status == "Tombstone";
+            if(targetIndex != -1) {
+                hTable[targetIndex].status == "Tombstone";
             }   
 
             return;
         }
 
         void printTable() {
+            bool firstPrinted = false;
+
             for(int i = 0; i < 26; i++) {
                 // Entry must exist. 
                 if(hTable[i].status == "Occupied") {
-                    if(i == 25) {
-                        // print with no space.
-                        cout << hTable[i].key;
-                    } else {
-                        // print with space. 
-                        cout << hTable[i].key << " ";
+                    if(firstPrinted) {
+                        cout << " ";
                     }
+                    cout << hTable[i].key;
+                    firstPrinted = true;
                 }
             }
         }
 };
 
+void execute(vector<string> instructions) {
+    // Create Hash Table.
+    hashTable ht;
+
+    for (size_t i = 0; i < instructions.size(); i++) {
+        char action = instructions[i][0];
+        string key = instructions[i].substr(1);
+
+        if (action == 'A') {
+            ht.Insert(key);
+        } else if (action == 'D') {
+            ht.Delete(key);
+        }
+    }
+
+    // Finally, print table. 
+    ht.printTable();
+    return;
+}
+
 int main(void) {
     // Execute instructions that are received, from getInput. 
-    vector<string> fullInstructions = getInput(); 
-    hashTable ht();
-    
-    size_t instructionCount = fullInstructions.size(); 
-    for(int i = 0; i < instructionCount; i++) {
-        
-    }
-    // Print the table. 
+    execute(getInput()); 
+
     return 0;
 }
