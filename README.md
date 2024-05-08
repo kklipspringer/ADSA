@@ -1,2 +1,0 @@
-# ADSA Assignments
-C++ 
