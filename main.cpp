@@ -1,26 +1,27 @@
 #include <iostream>
 #include <vector>
-#include <string>
+#include <sstream>
+
 using namespace std;
 
-/* 
-
-Approach Explained:
-    - Read input. The three 2D arrays (which I'll be handling as vectors)
-    - Convert the build, and destroy 2D vectors to numerical costs. 
-*/
-
-
-
-
-
-// 
-vector<vector<int>> costConversion(vector<vector<string>> *) {
-
+vector<string> split(const string& s, char delimiter) {
+    vector<string> tokens;
+    string token;
+    istringstream tokenStream(s);
+    while (getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
 }
 
 
 
-int main(void) {
+int main() {
+    // Get input. First split by spaces. 
+    string input;
+    getline(cin, input); 
+    vector<string> parts = split(input, ' ');
 
+    // Then examine each character and add as entries. 
+    return 0;
 }
