@@ -3,20 +3,11 @@
 #include <sstream>
 #include <algorithm>
 
-// Code Explanation/Approach:
-
-
 using namespace std;
 
 struct Edge {
-    int u;
-    int v;
-    int cost; 
-    Edge(int uIn, int vIn, int costIn) {
-        u = uIn;
-        v = vIn;
-        cost = costIn;
-    }
+    int u, v, cost;
+    Edge(int uIn, int vIn, int costIn) : u(uIn), v(vIn), cost(costIn) {}
 };
 
 bool compareEdges(const Edge& a, const Edge& b) {
@@ -28,27 +19,21 @@ private:
     vector<int> parent, rank;
 public:
     UnionFind(int n) : parent(n), rank(n, 0) {
-        for (int i = 0; i < n; ++i) {
-            parent[i] = i;
-        }
+        for (int i = 0; i < n; ++i) parent[i] = i;
     }
 
     int find(int u) {
-        if (parent[u] != u)
-            parent[u] = find(parent[u]);
+        if (parent[u] != u) parent[u] = find(parent[u]);
         return parent[u];
     }
 
     bool unionSets(int u, int v) {
-        int rootU = find(u);
-        int rootV = find(v);
+        int rootU = find(u), rootV = find(v);
         if (rootU != rootV) {
-            if (rank[rootU] > rank[rootV])
-                parent[rootV] = rootU;
+            if (rank[rootU] > rank[rootV]) parent[rootV] = rootU;
             else {
                 parent[rootU] = rootV;
-                if (rank[rootU] == rank[rootV])
-                    rank[rootV]++;
+                if (rank[rootU] == rank[rootV]) rank[rootV]++;
             }
             return true;
         }
@@ -58,51 +43,27 @@ public:
 
 vector<string> split(const string& s, char delimiter) {
     vector<string> tokens;
-    string token; 
+    string token;
     istringstream tokenStream(s);
-    while (getline(tokenStream, token, delimiter)) {
-        tokens.push_back(token);
-    }
+    while (getline(tokenStream, token, delimiter)) tokens.push_back(token);
     return tokens;
 }
 
-// Convert characters to integers
-// System is:
-    // [A,B] = [0, 25]
-    // [a,b] = [27, 53]
-
 int charToCost(char c) {
-    if ('0' <= c && c <= '9') {
-        return c - '0';
-    }
-
-    if ('A' <= c && c <= 'Z') {
-        return c - 'A';
-    }
-
-    if ('a' <= c && c <= 'z') {
-        return c - 'a' + 26;
-    }
-
-    return 0; 
+    if ('0' <= c && c <= '9') return c - '0';
+    if ('A' <= c && c <= 'Z') return c - 'A';
+    if ('a' <= c && c <= 'z') return c - 'a' + 26;
+    return 0;
 }
 
-// Return 2D vectors. Do necessary conversion from letters to numbers. 
-    /*
-                   _______
-        abc,def    |a b c|
-                   |d e f|
-    */
 vector<vector<int>> stringTo2DVector(const string& splitLine) {
     vector<string> rows = split(splitLine, ',');
-    vector<vector<int>> finalVector(rows.size(), vector<int>(rows[0].size())); 
-
+    vector<vector<int>> finalVector(rows.size(), vector<int>(rows[0].size()));
     for (size_t i = 0; i < rows.size(); i++) {
         for (size_t j = 0; j < rows[i].size(); j++) {
             finalVector[i][j] = charToCost(rows[i][j]);
         }
     }
-
     return finalVector;
 }
 
@@ -111,38 +72,34 @@ vector<Edge> makeEdgeList(const vector<vector<int>>& country, const vector<vecto
     int n = country.size();
     for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
-            // Add the destroy cost edge only if there's an existing road.
             if (country[i][j] == 1) {
-                // Adding the destruction cost as negative to prioritize in the MST
-                edges.emplace_back(i, j, -destroy[i][j]); 
+                edges.emplace_back(i, j, -destroy[i][j]);
             }
-            // Add the build cost edge only if there's no existing road.
-            if (country[i][j] == 0) {
-                edges.emplace_back(i, j, build[i][j]);
-            }
+            edges.emplace_back(i, j, build[i][j]);
         }
     }
     return edges;
 }
 
 int main() {
-    // Parse Input
-        // Example 1: 000,000,000 ABD,BAC,DCA ABD,BAC,DCA
-        // Example 2: 011,101,110 ABD,BAC,DCA ABD,BAC,DCA
     string input;
-    getline(cin, input); 
+    getline(cin, input);
     vector<string> parts = split(input, ' ');
 
     vector<vector<int>> country = stringTo2DVector(parts[0]);
     vector<vector<int>> build = stringTo2DVector(parts[1]);
     vector<vector<int>> destroy = stringTo2DVector(parts[2]);
 
-    // Make edge list. 
     vector<Edge> edges = makeEdgeList(country, build, destroy);
-    // Sort the edge list.
     sort(edges.begin(), edges.end(), compareEdges);
 
     UnionFind uf(country.size());
-
+    int totalCost = 0;
+    for (const Edge& edge : edges) {
+        if (uf.unionSets(edge.u, edge.v)) {
+            totalCost += (edge.cost < 0) ? abs(edge.cost) : edge.cost;
+        }
+    }
+    cout << "Minimum cost: " << totalCost << endl;
     return 0;
 }
