@@ -3,9 +3,6 @@
 #include <sstream>
 #include <algorithm>
 
-// Code Explanation/Approach:
-
-
 using namespace std;
 
 struct Edge {
@@ -26,15 +23,16 @@ bool compareEdges(const Edge& a, const Edge& b) {
 class UnionFind {
 private:
     vector<int> parent, rank;
+    
 public:
     UnionFind(int n) : parent(n), rank(n, 0) {
-        for (int i = 0; i < n; ++i) {
+        for(int i = 0; i < n; ++i) {
             parent[i] = i;
         }
     }
 
     int find(int u) {
-        if (parent[u] != u)
+        if(parent[u] != u)
             parent[u] = find(parent[u]);
         return parent[u];
     }
@@ -42,8 +40,8 @@ public:
     bool unionSets(int u, int v) {
         int rootU = find(u);
         int rootV = find(v);
-        if (rootU != rootV) {
-            if (rank[rootU] > rank[rootV])
+        if(rootU != rootV) {
+            if(rank[rootU] > rank[rootV])
                 parent[rootV] = rootU;
             else {
                 parent[rootU] = rootV;
@@ -60,7 +58,7 @@ vector<string> split(const string& s, char delimiter) {
     vector<string> tokens;
     string token; 
     istringstream tokenStream(s);
-    while (getline(tokenStream, token, delimiter)) {
+    while(getline(tokenStream, token, delimiter)) {
         tokens.push_back(token);
     }
     return tokens;
@@ -72,15 +70,13 @@ vector<string> split(const string& s, char delimiter) {
     // [a,b] = [27, 53]
 
 int charToCost(char c) {
-    if ('0' <= c && c <= '9') {
+    if('0' <= c && c <= '9') {
         return c - '0';
     }
-
-    if ('A' <= c && c <= 'Z') {
+    if('A' <= c && c <= 'Z') {
         return c - 'A';
     }
-
-    if ('a' <= c && c <= 'z') {
+    if('a' <= c && c <= 'z') {
         return c - 'a' + 26;
     }
 
@@ -97,8 +93,8 @@ vector<vector<int>> stringTo2DVector(const string& splitLine) {
     vector<string> rows = split(splitLine, ',');
     vector<vector<int>> finalVector(rows.size(), vector<int>(rows[0].size())); 
 
-    for (size_t i = 0; i < rows.size(); i++) {
-        for (size_t j = 0; j < rows[i].size(); j++) {
+    for(size_t i = 0; i < rows.size(); i++) {
+        for(size_t j = 0; j < rows[i].size(); j++) {
             finalVector[i][j] = charToCost(rows[i][j]);
         }
     }
@@ -109,15 +105,13 @@ vector<vector<int>> stringTo2DVector(const string& splitLine) {
 vector<Edge> makeEdgeList(const vector<vector<int>>& country, const vector<vector<int>>& build, const vector<vector<int>>& destroy) {
     vector<Edge> edges;
     int n = country.size();
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            // Add the destroy cost edge only if there's an existing road.
-            if (country[i][j] == 1) {
-                // Adding the destruction cost as negative to prioritize in the MST
+    for(int i = 0; i < n; i++) {
+        for(int j = i + 1; j < n; j++) {
+            if(country[i][j] == 1) {
                 edges.emplace_back(i, j, -destroy[i][j]); 
             }
-            // Add the build cost edge only if there's no existing road.
-            if (country[i][j] == 0) {
+
+            if(country[i][j] == 0) {
                 edges.emplace_back(i, j, build[i][j]);
             }
         }
@@ -125,10 +119,19 @@ vector<Edge> makeEdgeList(const vector<vector<int>>& country, const vector<vecto
     return edges;
 }
 
+bool isEdgeInMST(int u, int v, const vector<Edge>& mst) {
+    for(const Edge& edge : mst) {
+        if ((edge.u == u && edge.v == v) || (edge.u == v && edge.v == u)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 int main() {
     // Parse Input
-        // Example 1: 000,000,000 ABD,BAC,DCA ABD,BAC,DCA
-        // Example 2: 011,101,110 ABD,BAC,DCA ABD,BAC,DCA
+    // Example 1: 000,000,000 ABD,BAC,DCA ABD,BAC,DCA
+    // Example 2: 011,101,110 ABD,BAC,DCA ABD,BAC,DCA
     string input;
     getline(cin, input); 
     vector<string> parts = split(input, ' ');
@@ -137,12 +140,38 @@ int main() {
     vector<vector<int>> build = stringTo2DVector(parts[1]);
     vector<vector<int>> destroy = stringTo2DVector(parts[2]);
 
-    // Make edge list. 
     vector<Edge> edges = makeEdgeList(country, build, destroy);
-    // Sort the edge list.
     sort(edges.begin(), edges.end(), compareEdges);
 
     UnionFind uf(country.size());
+    vector<Edge> mst;
+    int mstCost = 0;
+
+    for(const Edge& edge : edges) {
+        if(uf.find(edge.u) != uf.find(edge.v)) {
+            uf.unionSets(edge.u, edge.v);
+            mst.push_back(edge);
+            mstCost += edge.cost;
+        }
+    }
+
+    int cost = 0;
+
+    for (const Edge& edge : mst) {
+        if(country[edge.u][edge.v] == 0) {
+            cost += build[edge.u][edge.v];
+        }
+    }
+
+    for(size_t i = 0; i < country.size(); i++) {
+        for(size_t j = i + 1; j < country.size(); j++) {
+            if(country[i][j] == 1 && !isEdgeInMST(i, j, mst)) {
+                cost += destroy[i][j];
+            }
+        }
+    }
+
+    cout << cost << endl;
 
     return 0;
 }
